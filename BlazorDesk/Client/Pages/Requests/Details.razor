@@ -1,0 +1,26 @@
+﻿@page "/details"
+@using BlazorDesk.AppModels
+@inject HttpClient Http
+
+<h1>Request details</h1>
+
+@if (request == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1>@request.Subject</h1>
+    <h2>@request.Id</h2>
+    <h4>@request.Description</h4>
+}
+
+@code {
+    Request request;
+
+    protected override async Task OnInitializedAsync()
+    {
+        request = await Http.GetJsonAsync<Request>("Requests");
+    }
+
+}
