@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDesk.Server", "BlazorDesk\Server\BlazorDesk.Server.csproj", "{934E37C0-25F2-43C1-8B04-8A26932ED5AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDesk.Server", "BlazorDesk\Server\BlazorDesk.Server.csproj", "{934E37C0-25F2-43C1-8B04-8A26932ED5AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDesk.Client", "BlazorDesk\Client\BlazorDesk.Client.csproj", "{BECC05CD-C878-4D1A-B666-D27634C752AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDesk.Client", "BlazorDesk\Client\BlazorDesk.Client.csproj", "{BECC05CD-C878-4D1A-B666-D27634C752AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDesk.AppModels", "BlazorDesk\AppModels\BlazorDesk.AppModels.csproj", "{7B9516CF-914A-4AFB-8533-DFDB11BA1CC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Constants", "BlazorDesk\Constants\Constants.csproj", "{A14E2F79-50DD-4E7C-9B93-905E8E4AB8A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDesk.DataModels", "BlazorDesk\DataModels\BlazorDesk.DataModels.csproj", "{68FFD793-6390-419E-82AE-75BBA65B4735}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{7B9516CF-914A-4AFB-8533-DFDB11BA1CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B9516CF-914A-4AFB-8533-DFDB11BA1CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B9516CF-914A-4AFB-8533-DFDB11BA1CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14E2F79-50DD-4E7C-9B93-905E8E4AB8A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14E2F79-50DD-4E7C-9B93-905E8E4AB8A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14E2F79-50DD-4E7C-9B93-905E8E4AB8A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14E2F79-50DD-4E7C-9B93-905E8E4AB8A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68FFD793-6390-419E-82AE-75BBA65B4735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68FFD793-6390-419E-82AE-75BBA65B4735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68FFD793-6390-419E-82AE-75BBA65B4735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68FFD793-6390-419E-82AE-75BBA65B4735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

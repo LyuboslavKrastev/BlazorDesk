@@ -1,0 +1,209 @@
+﻿@page "/requests"
+@using BlazorDesk.AppModels.View
+@inject HttpClient Http
+
+<h2 class="text-center">Requests</h2>
+
+
+@if (requests == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    <div>
+                        <form asp-area="" asp-controller="Requests" asp-action="Index" method="get" class="form-inline" style="display:inline;">
+                            <label for="staticEmail">Showing</label>
+                            <select name='currentFilter' onchange='this.form.submit()' class="form-control">
+                                <option value="">All Requests</option>
+                                @*@{
+                                        foreach (var status in Model.Statuses)
+                                        {
+                                            if (Model.CurrentFilter == status.Value)
+                                            {
+                                                <option selected="selected" value="@status.Value">@status.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@status.Value">@status.Text</option>
+                                            }
+
+                                        }
+                                    }*@
+                            </select>
+                        </form>
+                    </div>
+                </th>
+                <th class="col-md-1"><a asp-area="" asp-controller="Requests" asp-action="Create" class="btn btn-success" style="width: 100%;">New Request <i class=glyphicon-plus></i></a></th>
+                <th class="col-md-1"><a class="btn btn-warning" style="width: 100%;" data-toggle="modal" data-target="#noteModal">Add Note</a></th>
+                <th class="col-md-1"><a class="btn btn-warning" style="width: 100%;" id="mergeReq">Merge</a></th>
+                <th class="col-md-1"><a class="btn btn-danger" style="width: 100%;" id="deleteReq">Delete</a></th>
+
+                <th>
+                    <form method="get" class="form-inline">
+                        <div class="form-group">
+                            <label for="myfield">Show</label>
+                            @*@{
+                                    if (Model.CurrentFilter != null)
+                                    {
+                                        <input style="display:none" name="currentFilter" value="@Model.CurrentFilter" />
+                                    }
+                                    if (Model.CurrentSearch != null)
+                                    {
+                                        <input style="display:none" name="searchString" value="@Model.CurrentSearch" />
+                                    }
+                                    if (Model.CurrentSort != null)
+                                    {
+                                        <input style="display:none" name="sortOrder" value="@Model.CurrentSort" />
+                                    }
+                                }*@
+
+                            <select name="requestsPerPage" onchange='this.form.submit()' class="form-control">
+
+                                @*@foreach (var option in Model.ReqPerPageList)
+                                    {
+                                        if (Model.RequestsPerPage == int.Parse(option.Value))
+                                        {
+                                            <option selected="selected" value="@option.Value">@option.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+                                    }*@
+                            </select>
+                            <label for="myfield">per page</label>
+                        </div>
+                    </form>
+                </th>
+                <th>
+                    @*  @Html.PagedListPager(Model.Requests, page => Url.Action("Index", "Requests", new { sortOrder, searchString, currentFilter, page, requestsPerPage }))*@
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center"><input type="checkbox" class="checkbox-inline" id="checkAll"></th>
+                <th></th>
+                <th>
+                    <a>Id</a>
+                </th>
+                <th>
+                    <a>Subject</a>
+                </th>
+                <th>
+                    <a>Requester</a>
+                </th>
+                <th>
+                    <a>Assigned to</a>
+                </th>
+                <th>
+                    <a>Start time</a>
+                </th>
+                <th>
+                    <a>End time</a>
+                </th>
+                <th>
+                    <a>Status</a>
+                    <a id="searchIcon"><i class="glyphicon glyphicon-zoom-in pull-right"></i></a>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr id="searchBar" style="display: none">
+                <td></td>
+                <td></td>
+                <form id="searchForm" asp-area="" asp-controller="Requests" asp-action="Index" method="get" class="input-group">
+                    <input hidden name="currentFilter" value="Model.CurrentFilter" />
+                    <td>
+                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Id" name="IdSearch" value="Model.CurrentSearch.IdSearch" />
+                    </td>
+                    <td>
+                        <input form="searchForm" class="text-right center-block " type="text" placeholder="Subject" name="SubjectSearch" value="Model.CurrentSearch.SubjectSearch" />
+                    </td>
+                    <td>
+                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Requester Name" name="RequesterSearch" value="Model.CurrentSearch.RequesterSearch" />
+                    </td>
+                    <td>
+                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Assigned To" name="AssignedToSearch" value="Model.CurrentSearch.AssignedToSearch" />
+                    </td>
+                    <td>
+                        <input form="searchForm" class="text-right center-block" type="text" placeholder="MM/DD/YYYY" name="CreationDateSearch" value="Model.CurrentSearch.CreationDateSearch" />
+                    </td>
+                    <td>
+                        <input form="searchForm" class="text-right center-block" type="text" placeholder="MM/DD/YYYY" name="ClosingDateSearch" value="Model.CurrentSearch.ClosingDateSearch" />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success center-block">Search</button>
+                    </td>
+                </form>
+            </tr>
+
+            @foreach (var item in requests)
+            {
+                var notesModalId = item.Id + "Notes";
+                <tr>
+                    @{
+                        string noteColor = item.Id % 2 == 0 ? "orange" : "wheat";
+                    }
+                    <td class="text-center"><input value="@item.Id" type="checkbox" class="check"></td>
+                    <td class="text-center"><a class="glyphicon glyphicon-file" name="noteIcon" style="color:@noteColor" data-toggle="modal" data-target="#@notesModalId"></a></td>
+                    <td>
+                        <a href="/requests/details/@item.Id">@item.Id</a>
+                    </td>
+                    <td>
+                        <a asp-area="" asp-controller="Requests" asp-action="Details" asp-route-id="@item.Id">@item.Subject</a>
+                    </td>
+                    <td>
+                        requester
+                    </td>
+                    <td>
+                        @if (item.AssignedTo != null)
+                        {
+                            <a class="text-success"><strong>@item.AssignedTo</strong></a>
+                        }
+                        else
+                        {
+                            <label class="text-danger">Unassigned</label>
+                        }
+                    </td>
+                    <td>
+                        @item.StartTime;
+                    </td>
+                    <td>
+                        @item.Endtime;
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div style="display:inline">
+        <label for="timer">
+            <p>
+                Seconds until page reloads: <span class="text-danger" id="timer">
+                </span>
+            </p>
+        </label>
+    </div>
+}
+
+@code {
+    IEnumerable<RequestListingViewModel> requests;
+
+    protected override async Task OnInitializedAsync()
+    {
+        requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+    }
+
+}

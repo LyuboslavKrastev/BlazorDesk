@@ -1,0 +1,64 @@
+﻿@page "/requests/create"
+@using BlazorDesk.AppModels.Binding
+@using BlazorDesk.AppModels.View
+
+@inject HttpClient Http
+
+@if (categories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div>
+        <h2 class="text-center">Request</h2>
+
+        <EditForm Model="model" OnValidSubmit="OnSubmit" class="form-horizontal" encType="multipart/form-data">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label for="Subject">Subject</label>
+            <InputText class="form-control" @bind-Value="model.Subject" id="Subject" name="Subject" />
+            <label htmlFor="description">Description</label>
+            <InputTextArea rows="15" class="form-control" @bind-Value="model.Description" id="Description" onChange=""></InputTextArea>
+            <label htmlFor="CategoryId">Category</label>
+
+            <InputSelect @bind-Value="model.Category" class="form-control" id="CategoryId">
+                @foreach (var category in categories)
+                    {
+                    <option value="@category.Name">@category.Name</option>
+                    }
+            </InputSelect>
+
+            <br />
+            <input @*onChange={this.handleFileUpload}*@ class='text-center' type='file' id='multi' multiple />
+            <div class="form-group">
+                <br />
+                <div class="col-sm-10 col-sm-push-5">
+                    <button type="submit">Create</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code {
+    //binds it from the url
+    [Parameter]
+    public int Id { get; set; }
+
+    IEnumerable<CategoryViewModel> categories;
+
+
+    RequestCreationBindingModel model = new RequestCreationBindingModel();
+
+    protected async Task OnSubmit()
+    {
+        await Http.PostJsonAsync("api/Requests", model);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await Http.GetJsonAsync<IEnumerable<CategoryViewModel>>("api/Categories");
+    }
+
+}

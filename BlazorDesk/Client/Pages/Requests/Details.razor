@@ -1,5 +1,5 @@
-﻿@page "/details"
-@using BlazorDesk.AppModels
+﻿@page "/requests/details/{id:int}"
+@using BlazorDesk.AppModels.View
 @inject HttpClient Http
 
 <h1>Request details</h1>
@@ -16,11 +16,15 @@ else
 }
 
 @code {
-    Request request;
+    //binds it from the url
+    [Parameter]
+    public int Id { get; set; }
+
+    RequestDetailsViewModel request;
 
     protected override async Task OnInitializedAsync()
     {
-        request = await Http.GetJsonAsync<Request>("Requests");
+        request = await Http.GetJsonAsync<RequestDetailsViewModel>("Requests/" + Id);
     }
 
 }
