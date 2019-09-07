@@ -1,11 +1,19 @@
 ﻿@page "/"
 
-<div className="jumbotron text-center">
-    <h1>Blazordesk</h1>
-    <h2>Helpdesk Management System</h2>
-    <hr className="bg-dark" />
-    <p><a href="/Login">Login </a> if you have an account.</p>
-    <p><a href="/Register">Register </a> if you don't.</p>
-</div>
+<AuthorizeView>
+    <Authorized>
+        Hello, @context.User.Identity.Name!
+        <a href="LogOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <div className="jumbotron text-center">
+            <h1>Blazordesk</h1>
+            <h2>Helpdesk Management System</h2>
+            <hr className="bg-dark" />
+            <p><a href="/Login">Login </a> if you have an account.</p>
+            <p><a href="/Register">Register </a> if you don't.</p>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 <SurveyPrompt Title="How is Blazor working for you?" />

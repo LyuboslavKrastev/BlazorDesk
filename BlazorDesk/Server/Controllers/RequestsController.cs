@@ -2,6 +2,7 @@
 using BlazorDesk.AppModels.Binding;
 using BlazorDesk.AppModels.View;
 using BlazorDesk.DataModels.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace BlazorDesk.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RequestsController : ControllerBase
     {
         ICollection<Request> fakeRequests = new List<Request>

@@ -18,8 +18,11 @@ else
             <ValidationSummary />
             <label for="Subject">Subject</label>
             <InputText class="form-control" @bind-Value="model.Subject" id="Subject" name="Subject" />
+            <ValidationMessage For="@(() => model.Subject)" />
             <label htmlFor="description">Description</label>
             <InputTextArea rows="15" class="form-control" @bind-Value="model.Description" id="Description" onChange=""></InputTextArea>
+            <ValidationMessage For="@(() => model.Description)" />
+
             <label htmlFor="CategoryId">Category</label>
 
             <InputSelect @bind-Value="model.Category" class="form-control" id="CategoryId">
@@ -27,6 +30,8 @@ else
                     {
                     <option value="@category.Name">@category.Name</option>
                     }
+                /**/
+                /**/
             </InputSelect>
 
             <br />
