@@ -29,7 +29,7 @@ namespace BlazorDesk.Data.Models.Requests
         public RequestCategory Category { get; set; }
 
         [Required]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
         public DateTime? EndTime { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using BlazorDesk.Data.Models;
-using BlazorDesk.DataModels.Interfaces;
+﻿using BlazorDesk.DataModels.Interfaces;
 using Shared.Constants;
 using Shared.Constants.Validation;
 using System.ComponentModel.DataAnnotations;

@@ -24,7 +24,7 @@ namespace BlazorDesk.AppModels.Binding
         [MinLength(2)]
         public string Category { get; set; }
 
-        [DataType(DataType.Upload)]
-        public ICollection<IFormFile> Attachments { get; set; }
+        //[DataType(DataType.Upload)]
+        //public ICollection<IFormFile> Attachments { get; set; }
     }
 }

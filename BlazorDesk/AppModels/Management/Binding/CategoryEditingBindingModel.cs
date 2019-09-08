@@ -1,9 +1,9 @@
 ﻿using Shared.Constants.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlazorDesk.AppModels.View
+namespace BlazorDesk.AppModels.Binding.Management.ViewModel
 {
-    public class CategoryViewModel
+    public class CategoryEditingBindingModel
     {
         public int Id { get; set; }
 

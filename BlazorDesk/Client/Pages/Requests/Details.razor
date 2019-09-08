@@ -2,7 +2,7 @@
 @using BlazorDesk.AppModels.View
 @inject HttpClient Http
 
-<h1>Request details</h1>
+    <h2 class="text-center">Details for request #@request.Id</h2>
 
 @if (request == null)
 {
@@ -10,9 +10,67 @@
 }
 else
 {
-    <h1>@request.Subject</h1>
-    <h2>@request.Id</h2>
-    <h4>@request.Description</h4>
+    <div class="panel-group" id="request">
+        <div class="card">
+            <div class="card-header clearfix">
+                <div class="pull-left"><strong>Requester:</strong> <a data-toggle="modal" data-target="#@*@request.Author.Id*@">{request.author ? request.author.fullName : null}</a></div>
+                <div class="pull-right"><strong>Created On:</strong> @request.CreatedOn</div>
+            </div>
+            <div class="card-body" style="height: 300px, auto" >
+                <p><strong>Subject:</strong> @request.Subject</p>
+                <strong>Description</strong>
+                <p>@request.Description</p>
+            </div>
+
+            <div class="panel-footer clearfix">
+                @*{this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
+                <TechnicianPanel updateRequest={this.updateRequest} request={request} statuses={statuses} technicians={technicians} categories={categories}
+                                 setCategory={this.setCategory} setStatus={this.setStatus} setTechnician={this.setTechnician} /> :
+                <UserPanel request={request} />
+
+                }
+                <AttachmentsSection attachments={request.attachments} getFile={this.getFile} />*@
+
+
+            </div>
+        </div>
+    </div>
+    <div class="panel-group" id="resolution" style="display: none">
+        <div class="panel">
+            <div class="panel-heading clearfix">
+                <div class="pull-left"><strong>Resolution</strong></div>
+            </div>
+            <div class="panel-body">
+                <p htmlFor="resolution" style="word-wrap: break-word">{this.state.originalResolution}</p>
+
+                {this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
+
+                <form onSubmit={this.updateRequest} class="form-horizontal" encType="multipart/form-data">
+                    <label htmlFor="resolution">Set to:</label>
+
+                    <textarea rows="5" class="form-control" name="Resolution" onChange={this.setResolution} value={this.state.request.resolution}></textarea>
+                    <div class="form-group">
+                        <br />
+                        <div class="col-md-offset-5">
+                            <input onClick={this.resetResolution} value="Cancel" class="btn btn-danger" />
+                            <input type="submit" value="Set" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form> : null
+                }
+
+
+            </div>
+        </div>
+    </div>
+    <div class="panel-group" id="history" style="display: none">
+        <div class="panel">
+            <div class="panel-heading clearfix">
+                <div class="pull-left"><strong>History</strong></div>
+            </div>
+            <div class="panel-body"><p>TO BE IMPLEMENTED</p></div>
+        </div>
+    </div>
 }
 
 @code {
@@ -24,7 +82,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        request = await Http.GetJsonAsync<RequestDetailsViewModel>("Requests/" + Id);
+        request = await Http.GetJsonAsync<RequestDetailsViewModel>("api/Requests/" + Id);
     }
 
 }

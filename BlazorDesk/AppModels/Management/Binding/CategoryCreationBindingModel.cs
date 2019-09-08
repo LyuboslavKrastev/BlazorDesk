@@ -1,12 +1,11 @@
 ﻿using Shared.Constants.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlazorDesk.AppModels.View
-{
-    public class CategoryViewModel
-    {
-        public int Id { get; set; }
+namespace BlazorDesk.AppModels.Management.Binding
 
+{
+    public class CategoryCreationBindingModel
+    {
         [Required]
         [MinLength(RequestCategoryConstants.NameMinLength)]
         [MaxLength(RequestCategoryConstants.NameMaxLength)]

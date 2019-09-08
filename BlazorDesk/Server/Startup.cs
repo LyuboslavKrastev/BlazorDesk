@@ -13,6 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Text;
+using BlazorDesk.Data.Services.Interfaces;
+using BlazorDesk.Data.Services;
+using BlazorDesk.Data.Services.Repository;
+using BlazorDesk.Data.Services.Repository.Interfaces;
 
 namespace BlazorDesk.Server
 {
@@ -62,6 +66,23 @@ namespace BlazorDesk.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+            //services.AddScoped<IUsersService, UsersService>();
+            //services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped(typeof(DbRepository<>), typeof(DbRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+            services.AddScoped<ISolutionsService, SolutionsService>();
+            services.AddScoped<IApprovalsService, ApprovalsService>();
+            services.AddScoped<IApprovalStatusesService, ApprovalStatusesService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<IRequestsService, RequestsService>();
+            services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<IRepliesService, RepliesService>();
+
+            services.AddScoped<IRequestStatusesService, RequestStatusesService>();
+
+            services.AddScoped(typeof(AttachmentsService<>));
+            //services.AddScoped<IFileUploader, FileUploader>();
+            services.AddScoped<ReportsService, ReportsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
