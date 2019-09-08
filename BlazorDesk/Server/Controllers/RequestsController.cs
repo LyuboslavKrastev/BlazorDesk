@@ -1,7 +1,7 @@
 ﻿using BlazorDesk.AppModels;
 using BlazorDesk.AppModels.Binding;
 using BlazorDesk.AppModels.View;
-using BlazorDesk.DataModels.Requests;
+using BlazorDesk.Data.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace BlazorDesk.Server.Controllers
             {
                 Id = r.Id,
                 Subject = r.Subject,
-                Requester = r.Requester
+                Requester = r.Requester.FullName
             });
         }
         [HttpPost]

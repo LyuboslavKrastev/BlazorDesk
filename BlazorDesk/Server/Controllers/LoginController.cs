@@ -1,4 +1,5 @@
-﻿using BlazorDesk.AppModels.Binding;
+﻿using BlazorDesk.Data.Models;
+using BlazorDesk.AppModels.Binding;
 using BlazorDesk.Server.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,10 @@ namespace BlazorDesk.Server.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<IdentityUser> signInManager)
+                               SignInManager<User> signInManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;

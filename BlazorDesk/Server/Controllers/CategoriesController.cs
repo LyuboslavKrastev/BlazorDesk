@@ -1,6 +1,6 @@
 ﻿using BlazorDesk.AppModels;
 using BlazorDesk.AppModels.View;
-using BlazorDesk.DataModels.Requests;
+using BlazorDesk.Data.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;

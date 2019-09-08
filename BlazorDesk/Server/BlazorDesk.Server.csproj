@@ -28,7 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\BlazorDesk.Client.csproj" />
     <ProjectReference Include="..\AppModels\BlazorDesk.AppModels.csproj" />
-    <ProjectReference Include="..\DataModels\BlazorDesk.DataModels.csproj" />
+    <ProjectReference Include="..\Data\BlazorDesk.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,15 @@
+﻿@page "/logout"
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@*This component doesn't have any UI. When the user navigates to it, the Logout method on the AuthService is called
+ and then the user is redirected back to the home page.*@
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+
+}

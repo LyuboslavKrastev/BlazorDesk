@@ -1,4 +1,5 @@
-using BlazorDesk.Server.Data;
+using BlazorDesk.Data.Models;
+using BlazorDesk.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,7 @@ namespace BlazorDesk.Server
             services.AddDbContext<BlazorDeskDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<BlazorDeskDbContext>();
 
             /* The following code is adding and setting up some services required for authentication to the service container.

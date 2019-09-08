@@ -1,4 +1,4 @@
-﻿using Constants.Validation;
+﻿using Shared.Constants.Validation;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
