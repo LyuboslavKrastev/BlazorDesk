@@ -2,77 +2,111 @@
 @using BlazorDesk.AppModels.View
 @inject HttpClient Http
 
-    <h2 class="text-center">Details for request #@request.Id</h2>
+<h2 class="text-center">Details for request</h2>
 
 @if (request == null)
 {
-    <p><em>Loading...</em></p>
+    <LoadingSpinner />
 }
 else
 {
-    <div class="panel-group" id="request">
-        <div class="card">
-            <div class="card-header clearfix">
-                <div class="pull-left"><strong>Requester:</strong> <a data-toggle="modal" data-target="#@*@request.Author.Id*@">{request.author ? request.author.fullName : null}</a></div>
-                <div class="pull-right"><strong>Created On:</strong> @request.CreatedOn</div>
-            </div>
-            <div class="card-body" style="height: 300px, auto" >
-                <p><strong>Subject:</strong> @request.Subject</p>
-                <strong>Description</strong>
-                <p>@request.Description</p>
-            </div>
+    <div>
+        <!-- <AddNoteModal requestId={request.id} reload={this.loadRequest} hideModal={() => this.hideModal('noteModal')} /> -->
+        <!-- <AddApprovalModal technicians={technicians} requestId={request.id} reload={this.loadRequest} hideModal={() => this.hideModal('approvalModal')} /> -->
+        <!-- <NoteViewingModal notes={request.notes} requestId={request.id} hideModal={() => this.hideModal(`notes_${request.id}`)} /> -->
+        <!-- <Menu notes={request.notes} approvals={request.approvals} resolution={request.resolution}
+            requestId={request.id} showModal={this.showModal} /> -->
 
-            <div class="panel-footer clearfix">
-                @*{this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
-                <TechnicianPanel updateRequest={this.updateRequest} request={request} statuses={statuses} technicians={technicians} categories={categories}
-                                 setCategory={this.setCategory} setStatus={this.setStatus} setTechnician={this.setTechnician} /> :
-                <UserPanel request={request} />
+        <div class="panel-group" id="request">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="pull-left"><strong>Requester:</strong> <a data-toggle="modal" data-target="@request.Id">@request.Author.FullName</a></div>
+                    <div class="pull-right"><strong>Created On:</strong> @request.CreatedOn</div>
+                </div>
+                <div class="panel-body" style="height: 300px; overflow-y: scroll">
+                    <p><strong>Subject:</strong> @request.Subject</p>
+                    <strong>Description</strong>
+                    <p> @request.Description</p>
+                </div>
 
-                }
-                <AttachmentsSection attachments={request.attachments} getFile={this.getFile} />*@
+                <div class="card-footer">
+                    <!-- {this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
+                        <TechnicianPanel updateRequest={this.updateRequest} request={request} statuses={statuses} technicians={technicians} categories={categories}
+                            setCategory={this.setCategory} setStatus={this.setStatus} setTechnician={this.setTechnician} /> :
+                        <UserPanel request={request} />
 
+                    } -->
 
-            </div>
-        </div>
-    </div>
-    <div class="panel-group" id="resolution" style="display: none">
-        <div class="panel">
-            <div class="panel-heading clearfix">
-                <div class="pull-left"><strong>Resolution</strong></div>
-            </div>
-            <div class="panel-body">
-                <p htmlFor="resolution" style="word-wrap: break-word">{this.state.originalResolution}</p>
-
-                {this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
-
-                <form onSubmit={this.updateRequest} class="form-horizontal" encType="multipart/form-data">
-                    <label htmlFor="resolution">Set to:</label>
-
-                    <textarea rows="5" class="form-control" name="Resolution" onChange={this.setResolution} value={this.state.request.resolution}></textarea>
-                    <div class="form-group">
+                    <div>
+                        <div class="float-left"><strong>Status:</strong> @request.Status</div>
+                        <!-- {request.technician ?
+                            <div class="pull-right"><strong>Technician:</strong><a data-toggle="modal">{request.technician.fullName}</a>
+                            </div> :
+                            <div class="pull-right"><strong>Technician: </strong><span class="text-danger"><strong>Unassigned</strong></span></div>} -->
+                        <div class="float-right"><strong>Technician: </strong><span class="text-danger"><strong>Unassigned</strong></span></div>
                         <br />
-                        <div class="col-md-offset-5">
-                            <input onClick={this.resetResolution} value="Cancel" class="btn btn-danger" />
-                            <input type="submit" value="Set" class="btn btn-success" />
-                        </div>
+                        <div class="float-left"><strong>Category:</strong> @request.Category</div>
                     </div>
-                </form> : null
-                }
+
+                    @*<AttachmentsSection attachments={request.attachments} getFile={this.getFile} />*@
 
 
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel-group" id="history" style="display: none">
-        <div class="panel">
-            <div class="panel-heading clearfix">
-                <div class="pull-left"><strong>History</strong></div>
+        <div class="panel-group" id="resolution" style="display: none">
+            <div class="panel">
+                <div class="panel-heading clearfix">
+                    <div class="pull-left"><strong>Resolution</strong></div>
+                </div>
+                <div class="panel-body">
+                    <p htmlFor="resolution" style="word-wrap: break-word" }}>{this.state.originalResolution}</p>
+
+                    {this.state.currentUser !== null && (this.state.currentUser.role === "Admin" || this.state.currentUser.role === "Helpdesk") ?
+
+                    <form onSubmit={this.updateRequest} class="form-horizontal" encType="multipart/form-data">
+                        <label htmlFor="resolution">Set to:</label>
+
+                        <textarea rows="5" class="form-control" name="Resolution" onChange={this.setResolution} value={this.state.request.resolution}></textarea>
+                        <div class="form-group">
+                            <br />
+                            <div class="col-md-offset-5">
+                                <input onClick={this.resetResolution} value="Cancel" class="btn btn-danger" />
+                                <input type="submit" value="Set" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </form> : null
+                    }
+
+
+                </div>
             </div>
-            <div class="panel-body"><p>TO BE IMPLEMENTED</p></div>
         </div>
+        <div class="panel-group" id="history" style="display: none">
+            <div class="panel">
+                <div class="panel-heading clearfix">
+                    <div class="pull-left"><strong>History</strong></div>
+                </div>
+                <div class="panel-body"><p>TO BE IMPLEMENTED</p></div>
+            </div>
+        </div>
+
+        @*<div class="panel-group" id="approvals" style="display: none">
+            <ApprovalsSection approvals={request.approvals} currentUser={this.state.currentUser} reload={this.loadRequest} />
+        </div>
+
+        @if (requestReplies != null)
+        {
+            <Replies replies=@requestReplies />
+
+        }
+        <div class='text-center'>
+            <button class="btn btn-success" onclick="ToggleReplies">Reply</button>
+        </div>
+        <AddReply requestId=@request.id loadRequest={this.loadRequest} />*@
+
     </div>
 }
-
 @code {
     //binds it from the url
     [Parameter]
@@ -84,5 +118,5 @@ else
     {
         request = await Http.GetJsonAsync<RequestDetailsViewModel>("api/Requests/" + Id);
     }
-
 }
+

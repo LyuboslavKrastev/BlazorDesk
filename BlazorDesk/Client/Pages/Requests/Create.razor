@@ -26,10 +26,12 @@ else
             <label htmlFor="CategoryId">Category</label>
 
             <InputSelect @bind-Value="model.Category" class="form-control" id="CategoryId">
+                <option selected="selected" disabled="disabled">Select a category</option>
                 @foreach (var category in categories)
                     {
                     <option value="@category.Name">@category.Name</option>
                     }
+                /**/
                 /**/
                 /**/
             </InputSelect>

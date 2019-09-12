@@ -7,108 +7,112 @@
 
 @if (requests == null)
 {
-    <p><em>Loading...</em></p>
+    <LoadingSpinner />
 }
 else
 {
-    <table class="table table-hover table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    <div>
-                        <form asp-area="" asp-controller="Requests" asp-action="Index" method="get" class="form-inline" style="display:inline;">
-                            <label for="staticEmail">Showing</label>
-                            <select name='currentFilter' onchange='this.form.submit()' class="form-control">
-                                <option value="">All Requests</option>
-                                @*@{
-                                        foreach (var status in Model.Statuses)
-                                        {
-                                            if (Model.CurrentFilter == status.Value)
-                                            {
-                                                <option selected="selected" value="@status.Value">@status.Text</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@status.Value">@status.Text</option>
-                                            }
-
-                                        }
-                                    }*@
-                            </select>
-                        </form>
-                    </div>
-                </th>
-                <th class="col-md-1"><a asp-area="" asp-controller="Requests" asp-action="Create" class="btn btn-success" style="width: 100%;">New Request <i class=glyphicon-plus></i></a></th>
-                <th class="col-md-1"><a class="btn btn-warning" style="width: 100%;" data-toggle="modal" data-target="#noteModal">Add Note</a></th>
-                <th class="col-md-1"><a class="btn btn-warning" style="width: 100%;" id="mergeReq">Merge</a></th>
-                <th class="col-md-1"><a class="btn btn-danger" style="width: 100%;" id="deleteReq">Delete</a></th>
-
-                <th>
-                    <form method="get" class="form-inline">
-                        <div class="form-group">
-                            <label for="myfield">Show</label>
-                            @*@{
-                                    if (Model.CurrentFilter != null)
+    <form>
+        <div class="card-header">
+            <ul class="nav nav-pills nav-justified">
+                <li class="nav-item">
+                    <select name='currentFilter' onchange='ChangeStatus' class="form-control">
+                        <option value="">All Requests</option>
+                        @*@{
+                                foreach (var status in Model.Statuses)
+                                {
+                                    if (Model.CurrentFilter == status.Value)
                                     {
-                                        <input style="display:none" name="currentFilter" value="@Model.CurrentFilter" />
+                                        <option selected="selected" value="@status.Value">@status.Text</option>
                                     }
-                                    if (Model.CurrentSearch != null)
+                                    else
                                     {
-                                        <input style="display:none" name="searchString" value="@Model.CurrentSearch" />
+                                        <option value="@status.Value">@status.Text</option>
                                     }
-                                    if (Model.CurrentSort != null)
-                                    {
-                                        <input style="display:none" name="sortOrder" value="@Model.CurrentSort" />
-                                    }
-                                }*@
 
-                            <select name="requestsPerPage" onchange='this.form.submit()' class="form-control">
+                                }
+                            }*@
+                    </select>
+                </li>
 
-                                @*@foreach (var option in Model.ReqPerPageList)
-                                    {
-                                        if (Model.RequestsPerPage == int.Parse(option.Value))
-                                        {
-                                            <option selected="selected" value="@option.Value">@option.Text</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@option.Value">@option.Text</option>
-                                        }
-                                    }*@
-                            </select>
-                            <label for="myfield">per page</label>
-                        </div>
-                    </form>
-                </th>
-                <th>
-                    @*  @Html.PagedListPager(Model.Requests, page => Url.Action("Index", "Requests", new { sortOrder, searchString, currentFilter, page, requestsPerPage }))*@
-                </th>
-            </tr>
-        </thead>
-    </table>
 
+                <li class="nav-item">
+                    <a class="btn btn-success text-center" to="/Requests/Create">New</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning" onClick={this.showModal}>Add Note</a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="btn btn-warning" onClick={this.mergeRequests} id="mergeReq">Merge</a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="btn btn-danger" onClick={this.deleteRequests}>Delete</a>
+                </li>
+
+
+
+                <!-- @*@{
+                        if (Model.CurrentFilter != null)
+                        {
+                            <input style="display:none" name="currentFilter" value="@Model.CurrentFilter" />
+                        }
+                        if (Model.CurrentSearch != null)
+                        {
+                            <input style="display:none" name="searchString" value="@Model.CurrentSearch" />
+                        }
+                        if (Model.CurrentSort != null)
+                        {
+                            <input style="display:none" name="sortOrder" value="@Model.CurrentSort" />
+                        }
+                    }*@ -->
+                <li class="nav-item">
+
+                    <select name="requestsPerPage" onchange='this.form.submit()' class="form-control">
+
+                        @*@foreach (var option in Model.ReqPerPageList)
+                            {
+                                if (Model.RequestsPerPage == int.Parse(option.Value))
+                                {
+                                    <option selected="selected" value="@option.Value">@option.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }*@
+                    </select>
+                </li>
+                </ul>
+        </div>
+    </form>
+
+
+    <th>
+        <!-- @*  @Html.PagedListPager(Model.Requests, page => Url.Action("Index", "Requests", new { sortOrder, searchString, currentFilter, page, requestsPerPage }))*@ -->
+    </th>
     <table class="table table-hover table-striped table-bordered">
         <thead>
             <tr>
                 <th class="text-center"><input type="checkbox" class="checkbox-inline" id="checkAll"></th>
                 <th></th>
                 <th>
-                    <a>Id</a>
+                    <a href="#" onclick="alert('Ordered by id')">Id</a>
                 </th>
                 <th>
-                    <a>Subject</a>
+                    <a href="/">Subject</a>
                 </th>
                 <th>
-                    <a>Requester</a>
+                    <a href="/">Requester</a>
                 </th>
                 <th>
-                    <a>Assigned to</a>
+                    <a href="/">Assigned to</a>
                 </th>
                 <th>
-                    <a>Start time</a>
+                    <a href="/">Start time</a>
                 </th>
                 <th>
-                    <a>End time</a>
+                    <a href="/">End time</a>
                 </th>
                 <th>
                     <a>Status</a>
@@ -118,10 +122,11 @@ else
         </thead>
 
         <tbody>
-            <tr id="searchBar" style="display: none">
-                <td></td>
-                <td></td>
-                <form id="searchForm" asp-area="" asp-controller="Requests" asp-action="Index" method="get" class="input-group">
+            @if (ShowSearch)
+            {
+                <tr id="searchBar">
+                    <td></td>
+                    <td></td>
                     <input hidden name="currentFilter" value="Model.CurrentFilter" />
                     <td>
                         <input form="searchForm" class="text-right center-block" type="text" placeholder="Id" name="IdSearch" value="Model.CurrentSearch.IdSearch" />
@@ -144,8 +149,9 @@ else
                     <td>
                         <button type="submit" class="btn btn-success center-block">Search</button>
                     </td>
-                </form>
-            </tr>
+                </tr>
+            }
+
 
             @foreach (var item in requests)
             {
@@ -157,10 +163,10 @@ else
                     <td class="text-center"><input value="@item.Id" type="checkbox" class="check"></td>
                     <td class="text-center"><a class="glyphicon glyphicon-file" name="noteIcon" style="color:@noteColor" data-toggle="modal" data-target="#@notesModalId"></a></td>
                     <td>
-                        <a href="/requests/details/@item.Id">@item.Id</a>
+                        @item.Id
                     </td>
                     <td>
-                        <a asp-area="" asp-controller="Requests" asp-action="Details" asp-route-id="@item.Id">@item.Subject</a>
+                        <a href="/requests/details/@item.Id">@item.Subject</a>
                     </td>
                     <td>
                         requester
@@ -201,8 +207,16 @@ else
 @code {
     IEnumerable<RequestListingViewModel> requests;
 
+    bool ShowSearch = false;
+
     protected override async Task OnInitializedAsync()
     {
+        requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+    }
+
+    protected async Task ChangeStatus(int statusId)
+    {
+
         requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
     }
 

@@ -18,7 +18,7 @@ namespace BlazorDesk.AppModels.View
 
         public string Resolution { get; set; }
 
-        //public UserDetailsViewModel Author { get; set; }
+        public UserDetailsViewModel Author { get; set; }
 
         //public UserDetailsViewModel Technician { get; set; }
 

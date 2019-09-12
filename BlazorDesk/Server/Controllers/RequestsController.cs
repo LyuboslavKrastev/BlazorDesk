@@ -45,7 +45,11 @@ namespace BlazorDesk.Server.Controllers
         public RequestDetailsViewModel Get(int id)
         {
             string userId = this.userManager.GetUserId(User); // gets the user id from the jwt token
-            var request = this.requestsService.ById(id, userId, true).FirstOrDefault();
+            var request = this.requestsService.ById(id, userId, true)
+                .Include(r => r.Requester)
+                .Include(r => r.Status)
+                .Include(r => r.Category)
+                .FirstOrDefault();
             //if (request == null)
             //{
             //    return NotFound();
@@ -57,6 +61,12 @@ namespace BlazorDesk.Server.Controllers
                 Subject = request.Subject,
                 CreatedOn = request.StartTime.ToShortDateString(),
                 Description = request.Description,
+                Author = new UserDetailsViewModel
+                {
+                    FullName = request.Requester.FullName
+                },
+                Status = request.Status.Name,
+                Category = request.Category.Name
             };
             return result;
         }
