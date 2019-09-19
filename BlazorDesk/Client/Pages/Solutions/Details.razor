@@ -1,0 +1,52 @@
+﻿@page "/solutions/details/{id:int}"
+@using BlazorDesk.AppModels.View
+@inject HttpClient Http
+
+<h2 class="text-center">Details for solution</h2>
+
+@if (Solution == null)
+{
+    <LoadingSpinner />
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="float-left"><strong>Subject:</strong> @Solution.Title</div>
+            <div class="float-right"><strong>Created On:</strong> @Solution.CreatedOn</div>
+        </div>
+        <div class="card-body"><strong>Content:</strong> <p>@Solution.Content</p></div>
+        <div class="card-footer clearfix">
+            <div class="text-center"><strong> Author:</strong> @Solution.Author</div>
+        </div>
+        @*{solution.attachments !== undefined && solution.attachments.length > 0 ?
+            <div class="text-center">
+                <br />
+                <label class="text-center">Attachments: </label>
+                <hr />
+                {solution.attachments.map(a =>
+                <div>
+                    <a onClick={() =>
+                        this.getFile(a.fileName, a.pathToFile, a.id)}>
+                        {a.fileName}
+                    </a>
+                    <br />
+                </div>
+                )}
+            </div>
+            : null}*@
+    </div>
+}
+@code {
+    //binds it from the url
+    [Parameter]
+    public int Id { get; set; }
+
+    SolutionDetailsViewModel Solution;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Solution = await Http.GetJsonAsync<SolutionDetailsViewModel>("api/Solutions/" + Id);
+    }
+}
+

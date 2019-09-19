@@ -1,0 +1,43 @@
+﻿@page "/solutions/create"
+@using BlazorDesk.AppModels.Management.Binding
+
+@inject HttpClient Http
+
+<div>
+    <h2 class="text-center">Solution</h2>
+
+    <EditForm Model="model" OnValidSubmit="OnSubmit" class="form-horizontal" encType="multipart/form-data">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label for="Subject">Title</label>
+        <InputText class="form-control" @bind-Value="model.Title" id="Subject" name="Subject" />
+        <ValidationMessage For="@(() => model.Title)" />
+        <label htmlFor="description">Content</label>
+        <InputTextArea rows="15" class="form-control" @bind-Value="model.Content" id="Description" onChange=""></InputTextArea>
+        <ValidationMessage For="@(() => model.Content)" />
+
+        <br />
+        <input @*onChange={this.handleFileUpload}*@ class='text-center' type='file' id='multi' multiple />
+        <div class="form-group">
+            <br />
+            <div class="col-sm-10 col-sm-push-5">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    //binds it from the url
+    [Parameter]
+    public int Id { get; set; }
+
+
+    SolutionCreationBindingModel model = new SolutionCreationBindingModel();
+
+    protected async Task OnSubmit()
+    {
+        await Http.PostJsonAsync("api/Solutions", model);
+    }
+
+}

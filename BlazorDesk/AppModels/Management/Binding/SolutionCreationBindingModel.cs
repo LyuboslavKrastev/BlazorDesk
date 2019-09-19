@@ -18,7 +18,7 @@ namespace BlazorDesk.AppModels.Management.Binding
         [MaxLength(SolutionConstants.ContentMaxLength)]
         public string Content { get; set; }
 
-        public ICollection<IFormFile> Attachments { get; set; }
+        //public ICollection<IFormFile> Attachments { get; set; }
 
         public DateTime CreationTime { get; set; } = DateTime.Now;
 

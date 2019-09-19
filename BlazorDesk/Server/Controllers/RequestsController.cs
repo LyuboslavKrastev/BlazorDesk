@@ -21,21 +21,6 @@ namespace BlazorDesk.Server.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly IRequestsService requestsService;
-        ICollection<Request> fakeRequests = new List<Request>
-{
-                new Request
-            {
-                Id = 1,
-                Subject = "Subject 1",
-                Description = "Description!"
-            },
-            new Request
-            {
-                Id = 2,
-                Subject = "Subject 2",
-                Description = "Description!"
-            }
-};
         public RequestsController(UserManager<User> userManager, IRequestsService requestsService)
         {
             this.userManager = userManager;
@@ -79,7 +64,8 @@ namespace BlazorDesk.Server.Controllers
 
             // Filter the requests, depending on the criteria in the model
             var requestQueryable = this.requestsService.GetAll(currentUserId, isTechnician, model)
-                .ToArray(); ;
+                .Include(r => r.Status)
+                .ToArray();
 
             //// Needed for the calculation of the number of pages to be displayed
             //int total = requestQueryable.Count();
@@ -90,7 +76,8 @@ namespace BlazorDesk.Server.Controllers
                     Id = r.Id,
                     Subject = r.Subject,
                     Requester = "Nevermind",
-                    StartTime = r.StartTime
+                    StartTime = r.StartTime,
+                    Status = r.Status.Name
                 })
                 .ToArray();
 
@@ -160,7 +147,7 @@ namespace BlazorDesk.Server.Controllers
 
             //fakeRequests.Add(request);
 
-            return CreatedAtAction("Post", model);
+            return CreatedAtAction(nameof(this.PostAsync), model);
 
         }
     }

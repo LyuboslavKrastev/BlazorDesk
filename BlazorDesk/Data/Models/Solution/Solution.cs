@@ -28,7 +28,7 @@ namespace BlazorDesk.Data.Models.Solution
         public int Views { get; set; }
 
         [Required]
-        public DateTime CreationTime { get; set; }
+        public DateTime CreationTime { get; set; } = DateTime.UtcNow;
 
         public ICollection<SolutionAttachment> Attachments { get; set; } = new List<SolutionAttachment>();
     }

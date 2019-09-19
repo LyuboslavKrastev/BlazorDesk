@@ -1,3 +1,71 @@
 ﻿@page "/Solutions"
+@using BlazorDesk.AppModels.View
+@inject HttpClient Http
 
 <h2 class="text-center">Solutions</h2>
+
+@if (Solutions == null)
+{
+    <LoadingSpinner />
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="background-color: #36648B; color: white">Most Recent</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var solution in Solutions.OrderByDescending(s => s.CreationTime))
+                    {
+                        <tr>
+                            <td key={index}>
+                                <a href="/solutions/details/@solution.Id"><strong>@solution.Title</strong></a>
+                                <br />
+                                Created On: @solution.CreationTime | Views: @solution.Views <br />
+                                Author: @solution.Author
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="background-color: #36648B; color: white">Most Viewed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var solution in Solutions.OrderByDescending(s => s.Views))
+                    {
+                        <tr>
+                            <td key={index}>
+                                <a href="/solutions/details/@solution.Id"><strong>@solution.Title</strong></a>
+                                <br />
+                                Created On: @solution.CreationTime | Views: @solution.Views <br />
+                                Author: @solution.Author
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    IEnumerable<SolutionListingViewModel> Solutions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Solutions = await Http.GetJsonAsync<IEnumerable<SolutionListingViewModel>>("api/Solutions");
+    }
+}

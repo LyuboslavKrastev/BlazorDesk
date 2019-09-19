@@ -20,6 +20,29 @@ app {
     flex: 1;
 }
 
+.card-header {
+    background-color: #36648B;
+    color: white;
+}
+
+.card-footer {
+    background-color: #36648B;
+    color: white;
+}
+
+th {
+    background-color: #36648B;
+    color: white;
+}
+
+a {
+    color: forestgreen;
+}
+
+a:hover {
+    color: red
+}
+
     .main .top-row {
         background-color: #e6e6e6;
         border-bottom: 1px solid #d6d5d5;
