@@ -4,6 +4,9 @@ namespace BlazorDesk.AppModels
 {
     public class TableFilteringModel
     {
+        public string OrderBy { get; set; }
+
+        public bool OrderByDescending { get; set; } = true;
         public int? StatusId { get; set; }
 
         public int? IdSearch { get; set; }

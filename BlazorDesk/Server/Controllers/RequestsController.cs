@@ -65,6 +65,7 @@ namespace BlazorDesk.Server.Controllers
             // Filter the requests, depending on the criteria in the model
             var requestQueryable = this.requestsService.GetAll(currentUserId, isTechnician, model)
                 .Include(r => r.Status)
+                .Include(r => r.Requester)
                 .ToArray();
 
             //// Needed for the calculation of the number of pages to be displayed
@@ -75,7 +76,7 @@ namespace BlazorDesk.Server.Controllers
                 {
                     Id = r.Id,
                     Subject = r.Subject,
-                    Requester = "Nevermind",
+                    Requester = r.Requester.FullName,
                     StartTime = r.StartTime,
                     Status = r.Status.Name
                 })
@@ -93,16 +94,6 @@ namespace BlazorDesk.Server.Controllers
                 return BadRequest();
             }
 
-            //User user = 
-            //= userIdentifier.Identify(User);
-
-            //if (user == null)
-            //{
-            //    return BadRequest();
-            //}
-
-            //var request = Mapper.Map<Request>(model);
-
             string userId = this.userManager.GetUserId(User);
 
             var request = new Request
@@ -115,37 +106,7 @@ namespace BlazorDesk.Server.Controllers
 
             await this.requestsService.AddAsync(request);
 
-            //if (model.Attachments != null)
-            //{
-            //    string path = await fileUploader.CreateAttachmentAsync(model.Subject, model.Attachments, "Requests");
-
-            //    ICollection<RequestAttachment> attachments = new List<RequestAttachment>();
-
-            //    foreach (var attachment in model.Attachments)
-            //    {
-            //        RequestAttachment requestAttachment = new RequestAttachment
-            //        {
-            //            FileName = attachment.FileName,
-            //            PathToFile = Path.Combine(path, attachment.FileName),
-            //            RequestId = request.Id
-            //        };
-            //        attachments.Add(requestAttachment);
-            //    }
-
-            //    await this.attachmentService.AddRangeAsync(attachments);
-            //}
-
             await this.requestsService.SaveChangesAsync();
-
-            //return this.Ok(new { id = request.Id, subject = request.Subject });
-
-            //var request = new Request
-            //{
-            //    Subject = model.Subject,
-            //    Description = model.Description,
-            //};
-
-            //fakeRequests.Add(request);
 
             return CreatedAtAction(nameof(this.PostAsync), model);
 

@@ -92,27 +92,27 @@ namespace BlazorDesk.Data.Services
         public IQueryable<Request> GetAll(string currentUserId, bool isTechnician, TableFilteringModel model)
         {
             // Filter the requests, depending on the criteria in the model
-            IQueryable<Request> result = base.GetAll()
-                .Where(r => isTechnician ? true : r.RequesterId == currentUserId)
-                .Where(r => model.HasStatusIdFilter() ?
-                    r.StatusId == model.StatusId : true)
-                .Where(r => model.HasIdFilter() ?
-                    r.Id == model.IdSearch : true)
-                .Where(r => model.HasSubjectFilter() ?
-                    r.Subject.Contains(model.SubjectSearch) : true)
-                .Where(r => model.HasRequesterFilter() ?
-                    r.Requester.FullName.Contains(model.RequesterSearch) : true)
-                .Where(r => model.HasAssignedToFilter() ?
-                    r.AssignedTo.FullName == model.AssignedToSearch : true)
-                .Where(r => model.HasValidStartTimeFilter() ?
-                    r.StartTime.Date.CompareTo(model.GetStartTimeAsDateTime()) == 0 : true)
-                .Where(r => model.HasValidEndTimeFilter() && r.EndTime.HasValue ?
-                    r.EndTime.Value.Date.CompareTo(model.GetEndTimeAsDateTime()) == 0 : true)
-                .OrderByDescending(r => r.Id)
-                .Skip(model.Offset)
-                .Take(model.PerPage); // The default value is 50;
+            //IQueryable<Request> result = base.GetAll()
+            //    .Where(r => isTechnician ? true : r.RequesterId == currentUserId)
+            //    .Where(r => model.HasStatusIdFilter() ?
+            //        r.StatusId == model.StatusId : true)
+            //    .Where(r => model.HasIdFilter() ?
+            //        r.Id == model.IdSearch : true)
+            //    .Where(r => model.HasSubjectFilter() ?
+            //        r.Subject.Contains(model.SubjectSearch) : true)
+            //    .Where(r => model.HasRequesterFilter() ?
+            //        r.Requester.FullName.Contains(model.RequesterSearch) : true)
+            //    .Where(r => model.HasAssignedToFilter() ?
+            //        r.AssignedTo.FullName == model.AssignedToSearch : true)
+            //    .Where(r => model.HasValidStartTimeFilter() ?
+            //        r.StartTime.Date.CompareTo(model.GetStartTimeAsDateTime()) == 0 : true)
+            //    .Where(r => model.HasValidEndTimeFilter() && r.EndTime.HasValue ?
+            //        r.EndTime.Value.Date.CompareTo(model.GetEndTimeAsDateTime()) == 0 : true)
+            //    .OrderByDescending(r => r.Id)
+            //    .Skip(model.Offset)
+            //    .Take(model.PerPage); // The default value is 50;
 
-            return result;
+            return base.GetAll();
         }
 
         public override IQueryable<Request> ById(int id, string userId, bool isTechnician)

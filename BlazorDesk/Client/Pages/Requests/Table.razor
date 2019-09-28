@@ -1,5 +1,7 @@
 ﻿@page "/requests"
 @using BlazorDesk.AppModels.View
+@using BlazorDesk.AppModels
+@using Microsoft.JSInterop
 @inject HttpClient Http
 
 <h2 class="text-center">Requests</h2>
@@ -11,39 +13,13 @@
 }
 else
 {
-    <form>
-        <div class="card-header">
-            <ul class="nav nav-pills nav-justified">
+
+            <ul class="nav nav-justified">
                 <li class="nav-item">
-                    <select name='currentFilter' onchange='ChangeStatus' class="form-control">
-                        <option value="">All Requests</option>
-                        @*@{
-                                foreach (var status in Model.Statuses)
-                                {
-                                    if (Model.CurrentFilter == status.Value)
-                                    {
-                                        <option selected="selected" value="@status.Value">@status.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@status.Value">@status.Text</option>
-                                    }
-
-                                }
-                            }*@
-                    </select>
-                </li>
-
-
-                <li class="nav-item">
-                    <a class="btn btn-success text-center" to="/Requests/Create">New</a>
+                    <a class="btn btn-success" onClick={this.showModal}>Add Note</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning" onClick={this.showModal}>Add Note</a>
-                </li>
-                <li class="nav-item">
-
-                    <a class="btn btn-warning" onClick={this.mergeRequests} id="mergeReq">Merge</a>
+                    <a class="btn btn-success" onClick={this.mergeRequests} id="mergeReq">Merge</a>
                 </li>
                 <li class="nav-item">
 
@@ -68,25 +44,15 @@ else
                     }*@ -->
                 <li class="nav-item">
 
-                    <select name="requestsPerPage" onchange='this.form.submit()' class="form-control">
+                    <select name="requestsPerPage" class="form-control">
 
-                        @*@foreach (var option in Model.ReqPerPageList)
-                            {
-                                if (Model.RequestsPerPage == int.Parse(option.Value))
-                                {
-                                    <option selected="selected" value="@option.Value">@option.Text</option>
-                                }
-                                else
-                                {
-                                    <option value="@option.Value">@option.Text</option>
-                                }
-                            }*@
+                        <option>25</option>
+                        <option>50</option>
+                        <option>75</option>
+                        <option>100</option>
                     </select>
                 </li>
-                </ul>
-        </div>
-    </form>
-
+            </ul>
 
     <th>
         <!-- @*  @Html.PagedListPager(Model.Requests, page => Url.Action("Index", "Requests", new { sortOrder, searchString, currentFilter, page, requestsPerPage }))*@ -->
@@ -97,62 +63,72 @@ else
                 <th class="text-center"><input type="checkbox" class="checkbox-inline" id="checkAll"></th>
                 <th></th>
                 <th>
-                    <a href="#" onclick="alert('Ordered by id')">Id</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("Id"))>Id</button>
                 </th>
                 <th>
-                    <a href="/">Subject</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("Subject"))>Subject</button>
                 </th>
                 <th>
-                    <a href="/">Requester</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("Requester"))>Requester</button>
                 </th>
                 <th>
-                    <a href="/">Assigned to</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("AssignedTo"))>Assigned To</button>
                 </th>
                 <th>
-                    <a href="/">Start time</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("StartTime"))>Start time</button>
                 </th>
                 <th>
-                    <a href="/">End time</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("EndTime"))>End time</button>
                 </th>
                 <th>
-                    <a>Status</a>
+                    <button class="btn btn-success" @onclick=@(async () => await Sort("Status"))>Status</button>
                     <a id="searchIcon"><i class="glyphicon glyphicon-zoom-in pull-right"></i></a>
                 </th>
+            </tr>
+            <tr id="searchBar">
+                <td>Search</td>
+                <td></td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="Id" id="IdSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "Id"))"/>
+                </td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="Subject" id="SubjectSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "Subject"))" />
+                </td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="Requester Name" id="RequesterSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "Requester"))"/>
+                </td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="Assigned To" id="AssignedToSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "AssignedTo"))" />
+                </td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="MM/DD/YYYY" id="StartTimeSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "SartTime"))"/>
+                </td>
+                <td>
+                    <input class="text-center form-control" type="text" placeholder="MM/DD/YYYY" id="EndTimeSearch" @oninput="@(async (args) => await requestFilteringList(args.Value.ToString(), "EndTime"))" />
+                </td>
+                <td>
+                    <select name='currentFilter' onchange='ChangeStatus' class="form-control">
+                        <option value="">All Requests</option>
+                        @*@{
+                foreach (var status in Model.Statuses)
+                {
+                    if (Model.CurrentFilter == status.Value)
+                    {
+                        <option selected="selected" value="@status.Value">@status.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@status.Value">@status.Text</option>
+                    }
+
+                }
+            }*@
+                    </select>
+                </td>
             </tr>
         </thead>
 
         <tbody>
-            @if (ShowSearch)
-            {
-                <tr id="searchBar">
-                    <td></td>
-                    <td></td>
-                    <input hidden name="currentFilter" value="Model.CurrentFilter" />
-                    <td>
-                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Id" name="IdSearch" value="Model.CurrentSearch.IdSearch" />
-                    </td>
-                    <td>
-                        <input form="searchForm" class="text-right center-block " type="text" placeholder="Subject" name="SubjectSearch" value="Model.CurrentSearch.SubjectSearch" />
-                    </td>
-                    <td>
-                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Requester Name" name="RequesterSearch" value="Model.CurrentSearch.RequesterSearch" />
-                    </td>
-                    <td>
-                        <input form="searchForm" class="text-right center-block" type="text" placeholder="Assigned To" name="AssignedToSearch" value="Model.CurrentSearch.AssignedToSearch" />
-                    </td>
-                    <td>
-                        <input form="searchForm" class="text-right center-block" type="text" placeholder="MM/DD/YYYY" name="CreationDateSearch" value="Model.CurrentSearch.CreationDateSearch" />
-                    </td>
-                    <td>
-                        <input form="searchForm" class="text-right center-block" type="text" placeholder="MM/DD/YYYY" name="ClosingDateSearch" value="Model.CurrentSearch.ClosingDateSearch" />
-                    </td>
-                    <td>
-                        <button type="submit" class="btn btn-success center-block">Search</button>
-                    </td>
-                </tr>
-            }
-
-
             @foreach (var item in requests)
             {
                 var notesModalId = item.Id + "Notes";
@@ -169,7 +145,7 @@ else
                         <a href="/requests/details/@item.Id"><strong>@item.Subject</strong></a>
                     </td>
                     <td>
-                        requester
+                        @item.Requester
                     </td>
                     <td>
                         @if (item.AssignedTo != null)
@@ -182,10 +158,10 @@ else
                         }
                     </td>
                     <td>
-                        @item.StartTime;
+                        @item.StartTime.ToShortDateString()
                     </td>
                     <td>
-                        @item.Endtime;
+                        @item.Endtime
                     </td>
                     <td>
                         @item.Status
@@ -209,6 +185,12 @@ else
 
     bool ShowSearch = false;
 
+    TableFilteringModel model = new TableFilteringModel();
+
+    public string LastSortColumn { get; set; }
+
+    public bool OrderByDescending { get; set; } = false;
+
     protected override async Task OnInitializedAsync()
     {
         requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
@@ -220,4 +202,143 @@ else
         requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
     }
 
+}
+
+@functions {
+    protected async Task Sort(string SortColumn)
+    {
+        Console.WriteLine(SortColumn);
+        requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+        if (SortColumn == LastSortColumn)
+        {
+            OrderByDescending = !OrderByDescending;
+        }
+        else
+        {
+            OrderByDescending = false;
+        }
+
+        switch (SortColumn)
+        {
+            case "Id":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.Id).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.Id).ToArray();
+                }
+                break;
+            case "Subject":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.Subject.ToLower()).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.Subject.ToLower()).ToArray();
+                }
+                break;
+            case "Requester":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.Requester).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.Requester).ToArray();
+                }
+                break;
+            case "AssignedTo":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.AssignedTo).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.AssignedTo).ToArray();
+                }
+                break;
+            case "StartTime":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.StartTime).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.StartTime).ToArray();
+                }
+                break;
+            case "EndTime":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.Endtime).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.Endtime).ToArray();
+                }
+                break;
+            case "Status":
+                if (OrderByDescending)
+                {
+                    requests = requests.OrderByDescending(r => r.Status).ToArray();
+                }
+                else
+                {
+                    requests = requests.OrderBy(r => r.Status).ToArray();
+                }
+                break;
+            default:
+                break;
+        }
+
+        LastSortColumn = SortColumn;
+    }
+
+    // Filtering
+    protected async Task requestFilteringList(string Value, string columnName)
+    {
+        requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+
+        Console.WriteLine(Value);
+        Console.WriteLine(columnName);
+
+        if (Value.Trim().Length > 0)
+        {
+            switch (columnName)
+            {
+                case "Id":
+                    if (!int.TryParse(Value, out int id))
+                    {
+                        break;
+                    }
+                    requests = requests.Where(r => r.Id == id).ToArray();
+                    break;
+                case "Subject":
+                    requests = requests.Where(r => r.Subject.Contains(Value)).ToArray();
+                    break;
+                case "Requester":
+                    requests = requests.Where(r => r.Requester.Contains(Value)).ToArray();
+                    break;
+                case "AssignedTo":
+                    requests = requests.Where(r => r.AssignedTo.Contains(Value)).ToArray();
+                    break;
+                case "StartTime":
+                    requests = requests.Where(r => r.StartTime.ToShortDateString() == Value).ToArray();
+                    break;
+                case "EndTime":
+                    requests = requests.Where(r => r.Endtime.Value.ToShortDateString() == Value).ToArray();
+                    break;
+                default:
+                    requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+                    break;
+            }
+        }
+        else
+        {
+            requests = await Http.GetJsonAsync<IEnumerable<RequestListingViewModel>>("api/Requests");
+        }
+    }
 }
